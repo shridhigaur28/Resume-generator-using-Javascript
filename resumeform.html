@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Form</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      padding: 40px 0;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .resume-container {
+      max-width: 850px;
+      margin: 0 auto;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 36px;
+      color: #6a4c93;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: #6a4c93;
+      border-bottom: 2px solid #d8b4e2;
+      padding-bottom: 5px;
+      margin-top: 40px;
+      position: relative;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .section {
+      margin-top: 20px;
+      position: relative;
+      padding-right: 40px;
+    }
+
+    .submit-btn {
+      display: block;
+      margin: 50px auto 0 auto;
+      background: #6a4c93;
+      color: white;
+      padding: 14px 40px;
+      font-size: 18px;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .submit-btn:hover {
+      background: #5a3a80;
+    }
+
+    .photo-signature {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .add-btn, .remove-btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      background: #8e44ad;
+      color: white;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 30px;
+      text-align: center;
+    }
+
+    .add-btn:hover, .remove-btn:hover {
+      background: #732d91;
+    }
+
+    .remove-btn {
+  right: -20px;
+  top: -20px;
+  background: #e74c3c;
+  z-index: 10;
+}
+
+    label {
+      display: inline-block;
+      margin-right: 15px;
+    }
+    .form-actions {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
+  display: flex;
+  gap: 10px;
+}
+
+.form-actions button {
+  background-color: #6a1b9a;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  transition: background-color 0.3s ease;
+}
+
+.form-actions button:hover {
+  background-color: #4a148c;
+}
+
+@media print {
+  .form-actions {
+    display: none;
+  }
+}
+
+  </style>
+</head>
+<body>
+<div class="form-actions">
+  <button onclick="window.print()">🖨️ Print</button>
+  <button onclick="downloadPDF()">⬇️ Save PDF</button>
+</div>
+
+  <div class="resume-container">
+    <form id="resume-form" enctype="multipart/form-data">
+      <h1>RESUME FORM</h1>
+
+      <input type="text" placeholder="Candidate Name" name="candidateName" required />
+
+      <div class="section">
+  <label for="expType"><strong>Are you:</strong></label>
+  <select name="expType" id="expType" onchange="toggleExpIntern()" required>
+    <option value="">-- Select --</option>
+    <option value="fresher">Fresher</option>
+    <option value="experienced">Experienced</option>
+  </select>
+</div>
+
+
+      <h2>PROFILE</h2>
+      <textarea placeholder="Write something about yourself..." name="profile" required></textarea>
+
+      <h2>CONTACT</h2>
+      <input type="text" placeholder="Address" name="address" required />
+      <input type="tel" placeholder="Phone" name="phone" pattern="[0-9]{10}" required />
+      <input type="email" placeholder="Email" name="email" required />
+
+      <h2>EDUCATION</h2>
+      <div class="section">
+        <input type="text" placeholder="University Name" name="universityName" required />
+        <input type="text" placeholder="Degree" name="degree" required />
+        <div style="display: flex; gap: 10px;">
+          <input type="date" name="eduStart" required />
+          <input type="date" name="eduEnd" required />
+        </div>
+        <textarea placeholder="Description..." name="eduDesc" required></textarea>
+      </div>
+
+      <div id="experience-section" style="display: none;">
+        <h2>EXPERIENCE</h2>
+        <div class="section">
+          <input type="text" placeholder="Job Title" name="jobTitle" />
+          <input type="text" placeholder="Company Name" name="jobCompany" />
+          <div style="display: flex; gap: 10px;">
+            <input type="date" name="jobStart" />
+            <input type="date" name="jobEnd" />
+          </div>
+          <textarea placeholder="Responsibilities..." name="jobDesc"></textarea>
+        </div>
+      </div>
+
+      <div id="internship-section" style="display: none;">
+        <h2>INTERNSHIPS <button type="button" class="add-btn" onclick="addSection('internships')">+</button></h2>
+        <div id="internships">
+          <div class="section">
+            <input type="text" placeholder="Internship Title" name="internTitle[]" />
+            <input type="text" placeholder="Company Name" name="internCompany[]" />
+            <div style="display: flex; gap: 10px;">
+              <input type="date" name="internStart[]" />
+              <input type="date" name="internEnd[]" />
+            </div>
+            <textarea placeholder="Description..." name="internDesc[]"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <h2>SKILLS <button type="button" class="add-btn" onclick="addSkills()">+</button></h2>
+      <div id="skills">
+        <div class="section">
+          <input type="text" placeholder="Skill..." name="skills[]" required />
+        </div>
+      </div>
+
+      <h2>PROJECTS <button type="button" class="add-btn" onclick="addSection('projects')">+</button></h2>
+      <div id="projects">
+        <div class="section">
+          <input type="text" placeholder="Project Title" name="projectTitle[]" required />
+          <input type="text" placeholder="Technologies Used" name="projectTech[]" required />
+          <textarea placeholder="Description..." name="projectDesc[]" required></textarea>
+        </div>
+      </div>
+
+      <h2>ACHIEVEMENTS <button type="button" class="add-btn" onclick="addSection('achievements')">+</button></h2>
+      <div id="achievements">
+        <div class="section">
+          <input type="text" placeholder="Title" name="achieveTitle[]" required />
+          <textarea placeholder="Description..." name="achieveDesc[]" required></textarea>
+        </div>
+      </div>
+
+      <h2>PHOTO & SIGNATURE</h2>
+      <div class="photo-signature">
+        <div class="upload-block">
+          <label><strong>Upload Photo:</strong></label>
+          <input type="file" accept="image/*" name="photo" id="photo" required />
+        </div>
+        <div class="upload-block">
+          <label><strong>Upload Signature:</strong></label>
+          <input type="file" accept="image/*" name="signature" id="signature" required />
+        </div>
+      </div>
+
+      <h2>DECLARATION</h2>
+      <div class="section">
+        <textarea placeholder="I hereby declare..." name="declaration" rows="4" required></textarea>
+      </div>
+
+      <button class="submit-btn" type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    function toggleExpIntern() {
+  const selected = document.getElementById('expType').value;
+  document.getElementById('experience-section').style.display = selected === 'experienced' ? 'block' : 'none';
+  document.getElementById('internship-section').style.display = selected === 'fresher' ? 'block' : 'none';
+}
+
+    function addSection(type) {
+      const container = document.getElementById(type);
+      const section = document.createElement('div');
+      section.className = 'section';
+
+      let html = '';
+      if (type === 'internships') {
+        html = `
+          <input type="text" placeholder="Internship Title" name="internTitle[]" />
+          <input type="text" placeholder="Company Name" name="internCompany[]" />
+          <div style="display: flex; gap: 10px;">
+            <input type="date" name="internStart[]" />
+            <input type="date" name="internEnd[]" />
+          </div>
+          <textarea placeholder="Description..." name="internDesc[]"></textarea>
+        `;
+      } else if (type === 'projects') {
+        html = `
+          <input type="text" placeholder="Project Title" name="projectTitle[]" required />
+          <input type="text" placeholder="Technologies Used" name="projectTech[]" required />
+          <textarea placeholder="Description..." name="projectDesc[]" required></textarea>
+        `;
+      } else if (type === 'achievements') {
+        html = `
+          <input type="text" placeholder="Title" name="achieveTitle[]" required />
+          <textarea placeholder="Description..." name="achieveDesc[]" required></textarea>
+        `;
+      }
+
+      section.innerHTML = html + `
+        <button type="button" class="remove-btn" onclick="this.parentElement.remove()">−</button>
+      `;
+      container.appendChild(section);
+    }
+
+    function addSkills() {
+      const container = document.getElementById('skills');
+      const section = document.createElement('div');
+      section.className = 'section';
+      section.innerHTML = `
+        <input type="text" placeholder="Skill..." name="skills[]" required />
+        <button type="button" class="remove-btn" onclick="this.parentElement.remove()">−</button>
+      `;
+      container.appendChild(section);
+    }
+
+    document.getElementById("resume-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const data = {};
+
+      formData.forEach((value, key) => {
+        if (data[key]) {
+          if (Array.isArray(data[key])) {
+            data[key].push(value);
+          } else {
+            data[key] = [data[key], value];
+          }
+        } else {
+          data[key] = value;
+        }
+      });
+
+      const photo = document.getElementById("photo").files[0];
+      const signature = document.getElementById("signature").files[0];
+
+      const reader1 = new FileReader();
+      const reader2 = new FileReader();
+
+      reader1.onload = function(e1) {
+        data.photoBase64 = e1.target.result;
+
+        reader2.onload = function(e2) {
+          data.signatureBase64 = e2.target.result;
+
+          localStorage.setItem("resumeData", JSON.stringify(data));
+          window.location.href = "preview.html";
+        };
+
+        reader2.readAsDataURL(signature);
+      };
+
+      reader1.readAsDataURL(photo);
+    });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+  function downloadPDF() {
+    const element = document.querySelector('.resume-container');
+    const opt = {
+      margin:       0.3,
+      filename:     'Resume_Form.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save();
+  }
+</script>
+
+
+</body>
+</html>

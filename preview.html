@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resume Preview</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #f5f7fa, #e8eaf6);
+      padding: 40px 20px;
+      color: #333;
+    }
+
+    .resume-preview {
+      display: flex;
+      max-width: 1000px;
+      margin: auto;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      flex-wrap: wrap;
+    }
+
+    .left-box {
+      width: 35%;
+      background: #ede7f6;
+      padding: 30px;
+    }
+
+    .right-box {
+      width: 65%;
+      padding: 30px;
+      background: #ffffff;
+    }
+
+    .top-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .top-section img {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #7b2cbf;
+      margin-bottom: 15px;
+    }
+
+    .top-section h1 {
+      font-size: 26px;
+      color: #4a148c;
+    }
+
+    .top-section p {
+      font-size: 15px;
+      color: #555;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section h2 {
+      font-size: 18px;
+      color: #4a148c;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #b39ddb;
+      padding-bottom: 5px;
+    }
+
+    .section p,
+    .section li {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #444;
+    }
+
+    .section ul {
+      margin-left: 20px;
+      list-style: disc;
+    }
+
+    .entry-block {
+      margin-bottom: 15px;
+      background: #f3e5f5;
+      padding: 12px 16px;
+      border-left: 4px solid #7e57c2;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .signature-box {
+      text-align: right;
+      margin-top: 40px;
+    }
+
+    .signature-box img {
+      width: 160px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .signature-box p {
+      margin-top: 6px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    @media (max-width: 768px) {
+      .resume-preview {
+        flex-direction: column;
+      }
+
+      .left-box,
+      .right-box {
+        width: 100%;
+      }
+
+      .signature-box {
+        text-align: center;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .resume-preview {
+        box-shadow: none;
+        border: none;
+      }
+    }
+    .action-buttons {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
+  display: flex;
+  gap: 10px;
+}
+
+.action-buttons button {
+  background-color: #6a1b9a;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease;
+}
+
+.action-buttons button:hover {
+  background-color: #4a148c;
+}
+
+@media print {
+  .action-buttons {
+    display: none;
+  }
+}
+  </style>
+</head>
+<body>
+<div class="action-buttons">
+  <button onclick="window.print()">🖨️ Print</button>
+  <button onclick="downloadPDF()">⬇️ Download</button>
+</div>
+
+  <div class="resume-preview">
+    <div class="left-box">
+      <div class="top-section">
+        <img id="photoPreview" src="" alt="Photo" />
+        <h1 id="name"></h1>
+        <p><strong>Profile:</strong> <span id="profile"></span></p>
+      </div>
+
+      <div class="section" id="contactSection">
+        <h2>Contact</h2>
+        <p><strong>Address:</strong> <span id="address"></span></p>
+        <p><strong>Phone:</strong> <span id="phone"></span></p>
+        <p><strong>Email:</strong> <span id="email"></span></p>
+      </div>
+
+      <div class="section" id="skillsSection">
+        <h2>Skills</h2>
+        <ul id="skillsList"></ul>
+      </div>
+    </div>
+
+    <div class="right-box">
+      <div class="section" id="educationSection">
+        <h2>Education</h2>
+        <div class="entry-block">
+          <p><strong>University:</strong> <span id="universityName"></span></p>
+          <p><strong>Degree:</strong> <span id="degree"></span></p>
+          <p><strong>Duration:</strong> <span id="eduStart"></span> to <span id="eduEnd"></span></p>
+          <p><strong>Description:</strong> <span id="eduDesc"></span></p>
+        </div>
+      </div>
+
+      <div class="section" id="experienceSection">
+        <h2>Experience</h2>
+        <div id="experienceList"></div>
+      </div>
+
+      <div class="section" id="internshipSection">
+        <h2>Internships</h2>
+        <div id="internshipList"></div>
+      </div>
+
+      <div class="section" id="projectSection">
+        <h2>Projects</h2>
+        <div id="projectList"></div>
+      </div>
+
+      <div class="section" id="achievementSection">
+        <h2>Achievements</h2>
+        <div id="achievementList"></div>
+      </div>
+
+      <div class="section" id="declarationSection">
+        <h2>Declaration</h2>
+        <div class="entry-block">
+          <p id="declaration"></p>
+        </div>
+      </div>
+
+      <div class="signature-box">
+        <img id="signaturePreview" src="" alt="Signature">
+        <p>Signature</p>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const data = JSON.parse(localStorage.getItem("resumeData"));
+
+  const ensureArray = (item) => {
+    if (Array.isArray(item)) return item;
+    if (typeof item === 'string' && item.trim()) return [item];
+    return [];
+  };
+
+  const hideIfEmpty = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) {
+      if (!value || value.trim() === "") {
+        el.parentElement.style.display = "none";
+      } else {
+        el.textContent = value;
+      }
+    }
+  };
+
+  if (data) {
+    hideIfEmpty("name", data["candidateName"]);
+    hideIfEmpty("profile", data["profile"]);
+    hideIfEmpty("address", data["address"]);
+    hideIfEmpty("phone", data["phone"]);
+    hideIfEmpty("email", data["email"]);
+    hideIfEmpty("universityName", data["universityName"]);
+    hideIfEmpty("degree", data["degree"]);
+    hideIfEmpty("eduStart", data["eduStart"]);
+    hideIfEmpty("eduEnd", data["eduEnd"]);
+    hideIfEmpty("eduDesc", data["eduDesc"]);
+    hideIfEmpty("declaration", data["declaration"]);
+
+    if (data["photoBase64"]) {
+      document.getElementById("photoPreview").src = data["photoBase64"];
+    } else {
+      document.getElementById("photoPreview").style.display = "none";
+    }
+
+    if (data["signatureBase64"]) {
+      document.getElementById("signaturePreview").src = data["signatureBase64"];
+    } else {
+      document.querySelector(".signature-box").style.display = "none";
+    }
+
+    const skills = ensureArray(data["skills[]"]);
+    const skillsList = document.getElementById("skillsList");
+    if (skills.length === 0) {
+      document.getElementById("skillsSection").style.display = "none";
+    } else {
+      skills.forEach(skill => {
+        if (skill.trim()) {
+          const li = document.createElement("li");
+          li.textContent = skill;
+          skillsList.appendChild(li);
+        }
+      });
+    }
+
+    const expDiv = document.getElementById("experienceList");
+    if (data.jobTitle || data.jobCompany || data.jobStart || data.jobDesc) {
+      const block = document.createElement("div");
+      block.className = "entry-block";
+      block.innerHTML = `
+        ${data.jobTitle ? `<p><strong>Title:</strong> ${data.jobTitle}</p>` : ''}
+        ${data.jobCompany ? `<p><strong>Company:</strong> ${data.jobCompany}</p>` : ''}
+        ${(data.jobStart || data.jobEnd) ? `<p><strong>Duration:</strong> ${data.jobStart || ''} to ${data.jobEnd || ''}</p>` : ''}
+        ${data.jobDesc ? `<p><strong>Description:</strong> ${data.jobDesc}</p>` : ''}
+      `;
+      expDiv.appendChild(block);
+    } else {
+      document.getElementById("experienceSection").style.display = "none";
+    }
+
+    const addBlocks = (sectionId, titles, companies, starts, ends, descs, label) => {
+      const container = document.getElementById(sectionId.replace("Section", "List"));
+      const section = document.getElementById(sectionId);
+      let hasContent = false;
+      for (let i = 0; i < titles.length; i++) {
+        if (titles[i] || companies[i] || starts[i] || ends[i] || descs[i]) {
+          const div = document.createElement("div");
+          div.className = "entry-block";
+          div.innerHTML = `
+            ${titles[i] ? `<p><strong>Title:</strong> ${titles[i]}</p>` : ''}
+            ${companies[i] ? `<p><strong>${label}:</strong> ${companies[i]}</p>` : ''}
+            ${(starts[i] || ends[i]) ? `<p><strong>Duration:</strong> ${starts[i] || ''} to ${ends[i] || ''}</p>` : ''}
+            ${descs[i] ? `<p><strong>Description:</strong> ${descs[i]}</p>` : ''}
+          `;
+          container.appendChild(div);
+          hasContent = true;
+        }
+      }
+      if (!hasContent) section.style.display = "none";
+    };
+
+    addBlocks("internshipSection", ensureArray(data["internTitle[]"]), ensureArray(data["internCompany[]"]),
+              ensureArray(data["internStart[]"]), ensureArray(data["internEnd[]"]), ensureArray(data["internDesc[]"]), "Company");
+
+    addBlocks("projectSection", ensureArray(data["projectTitle[]"]), ensureArray(data["projectTech[]"]),
+              [], [], ensureArray(data["projectDesc[]"]), "Tech Used");
+
+    const achieveTitles = ensureArray(data["achieveTitle[]"]);
+    const achieveDescs = ensureArray(data["achieveDesc[]"]);
+    const achieveList = document.getElementById("achievementList");
+
+    if (achieveTitles.length === 0 && achieveDescs.length === 0) {
+      document.getElementById("achievementSection").style.display = "none";
+    } else {
+      for (let i = 0; i < achieveTitles.length; i++) {
+        if (achieveTitles[i] || achieveDescs[i]) {
+          const div = document.createElement("div");
+          div.className = "entry-block";
+          div.innerHTML = `
+            ${achieveTitles[i] ? `<p><strong>Title:</strong> ${achieveTitles[i]}</p>` : ''}
+            ${achieveDescs[i] ? `<p><strong>Description:</strong> ${achieveDescs[i]}</p>` : ''}
+          `;
+          achieveList.appendChild(div);
+        }
+      }
+    }
+
+  } else {
+    document.body.innerHTML = "<h2>No Data Found</h2>";
+  }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+  function downloadPDF() {
+    const element = document.querySelector('.resume-preview');
+    const opt = {
+      margin:       0,
+      filename:     'Resume.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save();
+  }
+</script>
+
+
+</body>
+</html>
