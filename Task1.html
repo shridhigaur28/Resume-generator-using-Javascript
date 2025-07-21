@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Flower-Themed Webpage</title>
+  <style>
+    /* Floral Background Gradient */
+    body {
+      margin: 0;
+      font-family: 'Georgia', serif;
+      background: linear-gradient(to right top, #fdf6f0, #fde6ec, #fce1f5);
+      color: #4b2e2e;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* Centered Card */
+    .container {
+      background: #fffaf8;
+      max-width: 750px;
+      width: 100%;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 10px 25px rgba(255, 182, 193, 0.3);
+      text-align: center;
+      border: 2px dashed #f8b4c0;
+    }
+
+    h1 {
+      color: #d6336c;
+      margin-bottom: 20px;
+      font-family: 'Segoe Script', cursive;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    img {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 12px;
+      margin: 20px 0;
+      box-shadow: 0 4px 12px rgba(255, 182, 193, 0.4);
+    }
+
+    a {
+      color: #c2185b;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    button {
+      background-color: #f06292;
+      color: white;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e91e63;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+
+      p {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Welcome to My Flower Garden 🌸</h1>
+    <p>Hi there! This is my first web development project using HTML, CSS, and JavaScript — now with a soft floral theme. I’m learning to build beautiful, interactive webpages!</p>
+
+    <img src="task1img.jpg" alt="Beautiful Pink Flowers" />
+
+    <p>Want to get the roadmap for learning Web Development.? Visit <a href="https://www.w3schools.com/whatis/" target="_blank">WD RoadMap</a>.</p>
+
+    <button onclick="showAlert()">Click to Bloom 🌷</button>
+  </div>
+
+  <script>
+    function showAlert() {
+      alert("You just bloomed some digital flowers! 🌼");
+    }
+  </script>
+
+</body>
+</html>
