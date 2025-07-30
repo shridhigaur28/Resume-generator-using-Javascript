@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic To-Do List Project</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+        * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+      color: #333;
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    header, footer {
+      background: linear-gradient(to right, #5c6bc0, #7e57c2);
+      color: white;
+      text-align: center;
+      padding: 1.5rem 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    nav {
+      background-color: #3f51b5;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding: 1rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      transition: all 0.3s;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    nav a:hover {
+      background: #7986cb;
+      transform: scale(1.05);
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+
+    form, .todo-section {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    form h2, .todo-section h2 {
+      margin-top: 0;
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: #2e2e2e;
+      text-transform: capitalize;
+    }
+
+    form input, form textarea, .task-input, .task-date {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    form input:focus, form textarea:focus,
+    .task-input:focus, .task-date:focus {
+      outline: none;
+      border-color: #7e57c2;
+      box-shadow: 0 0 8px #ce93d8;
+    }
+
+    form button {
+      padding: 0.75rem 1.5rem;
+      background-color: #7e57c2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    form button:hover {
+      background-color: #5e35b1;
+      transform: scale(1.05);
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .todo-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .task-set {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .task-set button {
+      padding: 0.5rem 0.8rem;
+      font-size: 1rem;
+    }
+
+    .add-task-btn {
+      align-self: flex-start;
+      background-color: #26a69a;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .add-task-btn:hover {
+      background-color: #00897b;
+    }
+
+    .remove-task-btn {
+      background-color: #ef5350;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .remove-task-btn:hover {
+      background-color: #c62828;
+    }
+
+    #addTaskBtn {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      background-color: #7e57c2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    #addTaskBtn:hover {
+      background-color: #5e35b1;
+      transform: scale(1.05);
+    }
+
+    ul#taskList {
+      list-style: none;
+      padding: 0;
+      margin-top: 1rem;
+    }
+
+    ul#taskList li {
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      background-color: #ede7f6;
+      border-left: 5px solid #5e35b1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 5px;
+    }
+
+    .task-date-label {
+      font-size: 0.85rem;
+      color: #555;
+      margin-left: 0.5rem;
+    }
+
+    .delete-btn {
+      background-color: #ef5350;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .delete-btn:hover {
+      background-color: #c62828;
+      transform: scale(1.05);
+    }
+
+    footer p {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    #taskStats {
+      margin-top: 1rem;
+      font-weight: bold;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    strong[contenteditable="true"] {
+      border-bottom: 1px dotted transparent;
+      padding: 2px;
+      transition: border-color 0.3s;
+    }
+
+    strong[contenteditable="true"]:hover {
+      border-color: #aaa;
+    }
+    .progress-bar {
+  width: 45%;
+  height: 20px;
+  background-color: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #7e57c2, #5c6bc0);
+  color: white;
+  text-align: right;
+  padding-right: 8px;
+  line-height: 20px;
+  border-radius: 10px;
+  transition: width 0.4s ease;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+/* Make body and html full height */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main content wrapper */
+.wrapper {
+  flex: 1; /* Takes remaining vertical space */
+  padding: 20px;
+}
+
+/* Footer styling */
+footer {
+  background-color: #7e57c2;
+  color: white;
+  text-align: center;
+  padding: 15px 0;
+  width: 100%;
+}
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+  <header>
+    <h1>Dynamic Task Manager with Contact Form</h1>
+  </header>
+
+  <nav>
+    <a href="#formSection">Contact Form</a>
+    <a href="#todoSection">To-Do List</a>
+  </nav>
+
+  <div class="container">
+    <section id="formSection">
+      <form id="contactForm">
+        <h2>Contact Us</h2>
+        <input type="text" id="name" placeholder="Your Name" required />
+        <input type="email" id="email" placeholder="Your Email" required />
+        <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
+        <p class="error" id="formError"></p>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+
+    <section class="todo-section" id="todoSection">
+  <h2>To-Do List</h2>
+  <div id="taskStats" style="margin-bottom: 1.5rem;">
+  <div style="margin-bottom: 0.3rem; font-weight: 600;">📊 Task Progress</div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill">0%</div>
+  </div>
+  <div id="taskCount" style="margin-top: 0.3rem; font-size: 0.9rem; font-weight: bold;"></div>
+</div>
+  <div class="todo-controls" id="taskContainer">
+    <div class="task-set">
+      <input type="text" class="task-input" placeholder="Add a task..." />
+      <input type="date" class="task-date" />
+      <button class="add-task-btn" onclick="addTaskInput()">+</button>
+    </div>
+  </div>
+  <button id="addTaskBtn" onclick="addTask()">Add Task</button>
+  <ul id="taskList"></ul>
+</section>
+</div>
+
+  <footer>
+    <p>&copy; 2025 Your Name. All rights reserved.</p>
+  </footer>
+
+  <script>
+    let completedTasks = 0;
+    let totalTasks = 0;
+
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const message = document.getElementById('message').value.trim();
+  const error = document.getElementById('formError');
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+
+  if (!name || !email || !message) {
+    error.textContent = 'Please fill out all fields.';
+    return;
+  }
+  if (!emailRegex.test(email)) {
+    error.textContent = 'Please enter a valid email address.';
+    return;
+  }
+
+  error.textContent = '';
+  alert('Form submitted successfully!');
+  document.getElementById('contactForm').reset();
+});
+
+
+    function addTaskInput() {
+      const container = document.getElementById('taskContainer');
+      const taskSet = document.createElement('div');
+      taskSet.className = 'task-set';
+      taskSet.innerHTML = `
+        <input type="text" class="task-input" placeholder="Add a task..." />
+        <input type="date" class="task-date" />
+        <button class="remove-task-btn" onclick="this.parentElement.remove()">−</button>
+      `;
+      container.appendChild(taskSet);
+    }
+
+    function addTask() {
+      const taskInputs = document.querySelectorAll('.task-input');
+      const taskDates = document.querySelectorAll('.task-date');
+      const taskList = document.getElementById('taskList');
+
+      for (let i = 0; i < taskInputs.length; i++) {
+        const taskText = taskInputs[i].value.trim();
+        const dateValue = taskDates[i].value;
+        if (taskText && dateValue) {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <span>
+              <input type="checkbox" onchange="toggleComplete(this)" />
+              <strong contenteditable="true">${taskText}</strong>
+              <span class='task-date-label'>(${dateValue})</span>
+            </span>
+            <button class="delete-btn" onclick="deleteTask(this)">Delete</button>
+          `;
+          taskList.appendChild(li);
+          totalTasks++;
+          updateStats();
+          taskInputs[i].value = '';
+          taskDates[i].value = '';
+        }
+      }
+    }
+
+    function deleteTask(btn) {
+      const li = btn.parentElement;
+      const checkbox = li.querySelector('input[type="checkbox"]');
+      if (checkbox && checkbox.checked) completedTasks--;
+      totalTasks--;
+      li.remove();
+      updateStats();
+    }
+
+    function toggleComplete(checkbox) {
+      const label = checkbox.nextElementSibling;
+      if (checkbox.checked) {
+        label.style.textDecoration = 'line-through';
+        label.style.color = '#888';
+        completedTasks++;
+      } else {
+        label.style.textDecoration = 'none';
+        label.style.color = '#000';
+        completedTasks--;
+      }
+      updateStats();
+    }
+
+    function updateStats() {
+  const percent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+  const fill = document.getElementById('progressFill');
+  fill.style.width = `${percent}%`;
+  fill.textContent = `${percent}%`;
+
+  const countText = `🧾 Total: ${totalTasks} | ✔️ Done: ${completedTasks}`;
+  document.getElementById('taskCount').textContent = countText;
+}
+  </script>
+</body>
+</html>
